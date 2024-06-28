@@ -6,11 +6,6 @@
 }
 
 
-
-
-
-
-
 body{
     background-color: #fffdd0;
     text-align: center;
@@ -33,9 +28,20 @@ div{
     border-color: var(--input-border-focus);
 }
 
+.card-container{
+    display: flex;
+    flex-wrap: wrap;
+}
 
 .card-css{
+    flex: 1 0 21%;
+    padding: 10px;
+    margin: 25px;
     border: 2px solid black;
     border-radius: 6px;
     width: 100px;
+}
+
+.card-container > .card-css:hover {
+    background-color: green;
 }

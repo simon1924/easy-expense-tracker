@@ -12,8 +12,7 @@ class Account {
 
 
     caricaAccounts(): any[] {
-        // @ts-ignore
-        const acc = JSON.parse(localStorage.getItem("accounts")) ?? [];
+        const acc = JSON.parse(localStorage.getItem("accounts") || "[]");
 
         return acc
     }
@@ -98,6 +97,7 @@ class Account {
         console.log(this.accounts);
         document.querySelector(".card-container")!.innerHTML = "";
     }
+
 
 };
 
