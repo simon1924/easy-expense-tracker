@@ -55,8 +55,11 @@ class Account {
                     // console.log(`ciao: ${this.accounts[i]["nome"]}, ${this.accounts[i]["bilancio"]}`);
                     this.accounts[i]["bilancio"] += denaro;
                     // console.log(this.accounts[i]);
+                    document.getElementById(nome)!.innerHTML = this.accounts[i]["bilancio"];
                 }
             }
+
+            
         }
 
         console.log(this.accounts);
@@ -72,7 +75,7 @@ class Account {
 
             let contenuto = `<div class="card-css">
         <h5>${item.nome}</h5>
-        <p>${item.bilancio}</h5>
+        <p id="${item.nome}">${item.bilancio}</h5>
         
         </div>`;
 
