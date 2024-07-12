@@ -7,13 +7,15 @@ class Account {
 
     constructor() {
         this.accounts = this.caricaAccounts();
-        console.log(`array degli account: ${this.accounts}`);
+        //console.log(`array degli account: ${this.accounts}`);
+        console.log(this.accounts);
+        this.creaCard(this.accounts);
     }
 
 
     caricaAccounts(): any[] {
         const acc = JSON.parse(localStorage.getItem("accounts") || "[]");
-
+        console.log(acc);
         return acc
     }
 
@@ -41,12 +43,12 @@ class Account {
         };
 
         let arrTemp = [temp];
-        // console.log(presenza);
+        console.log(presenza);
 
 
         if (presenza == 0) {
             this.accounts.push(temp);
-            localStorage.setItem("account", JSON.stringify(this.accounts))
+            localStorage.setItem("accounts", JSON.stringify(this.accounts))
             this.creaCard(arrTemp);
         }
         else {
@@ -59,7 +61,7 @@ class Account {
                 }
             }
 
-            
+
         }
 
         console.log(this.accounts);
@@ -68,16 +70,17 @@ class Account {
     }
 
     creaCard(arr) {
-
+        console.log("ciao da creaCard");
         const seleziona = document.querySelector(".card-container")!;
 
         arr.forEach((item) => {
 
-            let contenuto = `<div class="card-css">
-        <h5>${item.nome}</h5>
-        <p id="${item.nome}">${item.bilancio}</h5>
+            let contenuto =
+                `<div class="card-css">
+                <h5>${item.nome}</h5>
+                <p id="${item.nome}">${item.bilancio}</h5>
         
-        </div>`;
+                </div>`;
 
             seleziona.innerHTML += contenuto;
         })
@@ -87,7 +90,7 @@ class Account {
 
     }
 
-    aggiungiAccount(account: string){
+    aggiungiAccount(account: string) {
         const seleziona = document.getElementById("acc")!;
 
         let aggiugni = `<option value="${account}">${account}</option>`;
@@ -95,10 +98,13 @@ class Account {
         seleziona.innerHTML += aggiugni;
     }
 
-    ripulisci(){
-        this.accounts = [];
-        console.log(this.accounts);
-        document.querySelector(".card-container")!.innerHTML = "";
+    ripulisci() {
+        if (confirm("ripulire gli account?")) {
+            this.accounts = [];
+            //console.log(this.accounts);
+            document.querySelector(".card-container")!.innerHTML = "";
+            localStorage.clear();
+        }
     }
 
 
@@ -114,7 +120,7 @@ let operazioni: Account = new Account();
 
 document.getElementById("aggiungiAccount")?.addEventListener("click", () => {
     let temp: string = (document.getElementById("accountInput") as HTMLInputElement).value;
-    
+
     operazioni.aggiungiAccount(temp);
 })
 
@@ -142,7 +148,7 @@ bottone?.addEventListener("click", (e: Event) => {
 
     if (controllo) {
         quantitaNumero = parseFloat(quantita);
-        //console.log(quantitaNumero);
+        console.log(acc, quantitaNumero);
         operazioni.entrataUscita(acc, quantitaNumero);
     }
     else {
