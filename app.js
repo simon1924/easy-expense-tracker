@@ -3,12 +3,14 @@ var Account = /** @class */ (function () {
     function Account() {
         this.accounts = [];
         this.accounts = this.caricaAccounts();
-        console.log("array degli account: ".concat(this.accounts));
+        //console.log(`array degli account: ${this.accounts}`);
+        console.log(this.accounts);
+        this.creaCard(this.accounts);
+        this.creaSelect(this.accounts);
     }
     Account.prototype.caricaAccounts = function () {
-        var _a;
-        // @ts-ignore
-        var acc = (_a = JSON.parse(localStorage.getItem("accounts"))) !== null && _a !== void 0 ? _a : [];
+        var acc = JSON.parse(localStorage.getItem("accounts") || "[]");
+        console.log(acc);
         return acc;
     };
     Account.prototype.cercaAccount = function (arr, nome) {
@@ -30,10 +32,10 @@ var Account = /** @class */ (function () {
             "bilancio": denaro
         };
         var arrTemp = [temp];
-        // console.log(presenza);
+        console.log(presenza);
         if (presenza == 0) {
             this.accounts.push(temp);
-            localStorage.setItem("account", JSON.stringify(this.accounts));
+            localStorage.setItem("accounts", JSON.stringify(this.accounts));
             this.creaCard(arrTemp);
         }
         else {
@@ -42,29 +44,64 @@ var Account = /** @class */ (function () {
                     // console.log(`ciao: ${this.accounts[i]["nome"]}, ${this.accounts[i]["bilancio"]}`);
                     this.accounts[i]["bilancio"] += denaro;
                     // console.log(this.accounts[i]);
+                    localStorage.setItem("accounts", JSON.stringify(this.accounts));
+                    document.getElementById(nome).innerHTML = this.accounts[i]["bilancio"];
                 }
             }
         }
         console.log(this.accounts);
     };
     Account.prototype.creaCard = function (arr) {
+        console.log("ciao da creaCard");
         var seleziona = document.querySelector(".card-container");
         arr.forEach(function (item) {
-            var contenuto = "<div class=\"card-css\">\n        <h5>".concat(item.nome, "</h5>\n        <p>").concat(item.bilancio, "</h5>\n        \n        </div>");
+            var contenuto = "<div class=\"card-css\">\n                <h5>".concat(item.nome, "</h5>\n                <p id=\"").concat(item.nome, "\">").concat(item.bilancio, "</h5>\n        \n                </div>");
             seleziona.innerHTML += contenuto;
         });
     };
-    Account.prototype.modificaCard = function () {
+    Account.prototype.creaSelect = function (arr) {
+        var divSelect = document.getElementById("divSelect");
+        var selectList = document.createElement("select");
+        selectList.id = "acc";
+        selectList.className = "prima";
+        divSelect.appendChild(selectList);
+        arr.forEach(function (item) {
+            var option = document.createElement("option");
+            option.value = item.nome;
+            option.text = item.nome;
+            selectList.appendChild(option);
+        });
     };
     Account.prototype.aggiungiAccount = function (account) {
-        var seleziona = document.getElementById("acc");
-        var aggiugni = "<option value=\"".concat(account, "\">").concat(account, "</option>");
-        seleziona.innerHTML += aggiugni;
+        var array = [];
+        for (var i = 0; i < this.accounts.length; i++) {
+            array.push(this.accounts[i]["nome"]);
+        }
+        console.log(array);
+        //const presente: boolean = array.includes(account);
+        if (!(array.indexOf(account) !== -1)) {
+            var temporaneo = {
+                "nome": account,
+                "bilancio": 0
+            };
+            this.accounts.push(temporaneo);
+            var seleziona = document.getElementById("acc");
+            var aggiugni = "<option value=\"".concat(account, "\">").concat(account, "</option>");
+            seleziona.innerHTML += aggiugni;
+            localStorage.setItem("accounts", JSON.stringify(this.accounts));
+            var selezionaContainer = document.querySelector(".card-container");
+            var contenuto = "<div class=\"card-css\">\n                <h5>".concat(account, "</h5>\n                <p id=\"").concat(account, "\"></h5>\n            \n                </div>");
+            selezionaContainer.innerHTML += contenuto;
+            //bisgona creare le card di quelli che si aggiungono
+        }
     };
     Account.prototype.ripulisci = function () {
-        this.accounts = [];
-        console.log(this.accounts);
-        document.querySelector(".card-container").innerHTML = "";
+        if (confirm("ripulire gli account?")) {
+            this.accounts = [];
+            //console.log(this.accounts);
+            document.querySelector(".card-container").innerHTML = "";
+            localStorage.clear();
+        }
     };
     return Account;
 }());
@@ -89,7 +126,7 @@ bottone === null || bottone === void 0 ? void 0 : bottone.addEventListener("clic
     var quantitaNumero;
     if (controllo) {
         quantitaNumero = parseFloat(quantita);
-        //console.log(quantitaNumero);
+        console.log(acc, quantitaNumero);
         operazioni.entrataUscita(acc, quantitaNumero);
     }
     else {

@@ -10,6 +10,7 @@ class Account {
         //console.log(`array degli account: ${this.accounts}`);
         console.log(this.accounts);
         this.creaCard(this.accounts);
+        this.creaSelect(this.accounts);
     }
 
 
@@ -57,7 +58,10 @@ class Account {
                     // console.log(`ciao: ${this.accounts[i]["nome"]}, ${this.accounts[i]["bilancio"]}`);
                     this.accounts[i]["bilancio"] += denaro;
                     // console.log(this.accounts[i]);
+                    localStorage.setItem("accounts", JSON.stringify(this.accounts));
                     document.getElementById(nome)!.innerHTML = this.accounts[i]["bilancio"];
+
+
                 }
             }
 
@@ -86,16 +90,65 @@ class Account {
         })
     }
 
-    modificaCard() {
+    creaSelect(arr) {
+        const divSelect = document.getElementById("divSelect")!;
 
+        let selectList = document.createElement("select");
+        selectList.id = "acc";
+        selectList.className = "prima";
+
+        divSelect.appendChild(selectList);
+
+        arr.forEach(item => {
+            let option = document.createElement("option");
+            option.value = item.nome;
+            option.text = item.nome;
+            selectList.appendChild(option);
+        })
     }
 
-    aggiungiAccount(account: string) {
-        const seleziona = document.getElementById("acc")!;
+    aggiungiAccount(account) {
 
-        let aggiugni = `<option value="${account}">${account}</option>`;
+        let array: string[] = [];
+        for (let i = 0; i < this.accounts.length; i++) {
+            array.push(this.accounts[i]["nome"]);
+        }
+        console.log(array);
 
-        seleziona.innerHTML += aggiugni;
+        //const presente: boolean = array.includes(account);
+        if (!(array.indexOf(account) !== -1)) {
+
+            let temporaneo =
+            {
+                "nome": account,
+                "bilancio": 0
+            };
+
+            this.accounts.push(temporaneo);
+            const seleziona = document.getElementById("acc")!;
+
+            let aggiugni = `<option value="${account}">${account}</option>`;
+
+            seleziona.innerHTML += aggiugni;
+            localStorage.setItem("accounts", JSON.stringify(this.accounts));
+
+
+            const selezionaContainer = document.querySelector(".card-container")!;
+
+
+
+
+            let contenuto = `<div class="card-css">
+                <h5>${account}</h5>
+                <p id="${account}"></h5>
+            
+                </div>`;
+
+            selezionaContainer.innerHTML += contenuto;
+
+            //bisgona creare le card di quelli che si aggiungono
+
+        }
     }
 
     ripulisci() {
